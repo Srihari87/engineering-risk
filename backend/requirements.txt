@@ -13,3 +13,4 @@ tree-sitter
 tree-sitter-python
 tree-sitter-typescript
 tree-sitter-go
+sentry-sdk

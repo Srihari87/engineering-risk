@@ -83,3 +83,45 @@ def get_repo_risk_scores(repo_id: int):
     scores = engine.score_all_services(repo_id)
     engine.close()
     return scores
+
+from src.models.models import Service, Incident, Repo, Commit
+
+@router.get("/services/{service_id}/incidents")
+def get_service_incidents(service_id: int, db: Session = Depends(get_db)):
+    """Get incidents for a service"""
+    incidents = db.query(Incident).filter(
+        Incident.service_id == service_id
+    ).all()
+    
+    return [
+        {
+            "id": i.id,
+            "title": i.title,
+            "error_type": i.error_type,
+            "file_path": i.file_path,
+            "first_seen": i.first_seen,
+            "last_seen": i.last_seen,
+            "occurrence_count": i.occurrence_count,
+            "is_resolved": i.is_resolved
+        }
+        for i in incidents
+    ]
+
+@router.get("/incidents/recent")
+def get_recent_incidents(limit: int = 20, db: Session = Depends(get_db)):
+    """Get recent incidents"""
+    incidents = db.query(Incident).order_by(
+        Incident.last_seen.desc()
+    ).limit(limit).all()
+    
+    return [
+        {
+            "id": i.id,
+            "service_id": i.service_id,
+            "title": i.title,
+            "error_type": i.error_type,
+            "last_seen": i.last_seen,
+            "occurrence_count": i.occurrence_count
+        }
+        for i in incidents
+    ]
