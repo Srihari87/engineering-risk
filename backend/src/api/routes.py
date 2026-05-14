@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from src.db.connection import get_db
 from src.models.models import Service, Incident
 from datetime import datetime, timedelta
+from src.models.models import Service, Incident, Repo, Commit
 
 router = APIRouter(prefix="/api", tags=["api"])
 
@@ -33,3 +34,34 @@ def get_service_risk(service_id: int, db: Session = Depends(get_db)):
 def health_check():
     """Health check endpoint"""
     return {"status": "ok", "version": "0.1.0"}
+
+@router.get("/repos")
+def get_repos(db: Session = Depends(get_db)):
+    """Get all repos"""
+    repos = db.query(Repo).all()
+    return [
+        {
+            "id": r.id,
+            "name": r.name,
+            "full_name": r.full_name,
+            "owner": r.owner_login,
+            "url": r.url,
+            "commits": len(r.commits)
+        }
+        for r in repos
+    ]
+
+@router.get("/repos/{repo_id}/commits")
+def get_repo_commits(repo_id: int, db: Session = Depends(get_db)):
+    """Get commits for a repo"""
+    commits = db.query(Commit).filter(Commit.repo_id == repo_id).all()
+    return [
+        {
+            "hash": c.git_hash,
+            "author": c.author_login,
+            "message": c.message,
+            "timestamp": c.timestamp,
+            "is_merge": c.is_merge
+        }
+        for c in commits
+    ]

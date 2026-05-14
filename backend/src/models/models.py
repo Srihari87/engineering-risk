@@ -18,9 +18,11 @@ class Repo(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
+    # Relationships
     services = relationship("Service", back_populates="repo", cascade="all, delete-orphan")
     files = relationship("File", back_populates="repo", cascade="all, delete-orphan")
     commits = relationship("Commit", back_populates="repo", cascade="all, delete-orphan")
+    incidents = relationship("Incident", back_populates="repo", cascade="all, delete-orphan")  # ADD THIS LINE
 
 class Service(Base):
     __tablename__ = "services"
