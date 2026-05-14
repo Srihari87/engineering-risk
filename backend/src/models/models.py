@@ -89,6 +89,19 @@ class Commit(Base):
     
     repo = relationship("Repo", back_populates="commits")
 
+class Dependency(Base):
+    __tablename__ = "dependencies"
+    
+    id = Column(BigInteger, primary_key=True)
+    from_service_id = Column(BigInteger, ForeignKey("services.id"), nullable=False)
+    to_service_id = Column(BigInteger, ForeignKey("services.id"), nullable=False)
+    is_critical = Column(Boolean, default=False)
+    example_code_path = Column(Text)
+    discovered_at = Column(DateTime, default=datetime.utcnow)
+    
+    from_service = relationship("Service", foreign_keys=[from_service_id])
+    to_service = relationship("Service", foreign_keys=[to_service_id])
+    
 class Incident(Base):
     __tablename__ = "incidents"
     

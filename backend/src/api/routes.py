@@ -65,3 +65,21 @@ def get_repo_commits(repo_id: int, db: Session = Depends(get_db)):
         }
         for c in commits
     ]
+
+from src.scoring.risk_engine import RiskScoringEngine
+
+@router.get("/services/{service_id}/risk-score")
+def get_service_risk_score(service_id: int):
+    """Get risk score for a service"""
+    engine = RiskScoringEngine()
+    score = engine.score_service(service_id)
+    engine.close()
+    return score
+
+@router.get("/repos/{repo_id}/risk-scores")
+def get_repo_risk_scores(repo_id: int):
+    """Get risk scores for all services in a repo"""
+    engine = RiskScoringEngine()
+    scores = engine.score_all_services(repo_id)
+    engine.close()
+    return scores
