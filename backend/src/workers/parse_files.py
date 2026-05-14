@@ -20,13 +20,13 @@ def parse_repo_files(repo_id: int, owner: str, repo_name: str):
         
         # List of common code files to parse
         code_files = [
-            'src/main.py',
-            'src/config.py',
-            'src/db/connection.py',
-            'src/models/models.py',
-            'src/api/routes.py',
-            'src/connectors/github_connector.py',
-            'src/parsers/tree_sitter_parser.py',
+            'backend/src/main.py',
+            'backend/src/config.py',
+            'backend/src/db/connection.py',
+            'backend/src/models/models.py',
+            'backend/src/api/routes.py',
+            'backend/src/connectors/github_connector.py',
+            'backend/src/parsers/tree_sitter_parser.py',
         ]
         
         parsed_count = 0
