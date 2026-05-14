@@ -44,7 +44,7 @@ class File(Base):
     
     id = Column(BigInteger, primary_key=True)
     repo_id = Column(BigInteger, ForeignKey("repos.id"), nullable=False)
-    service_id = Column(BigInteger, ForeignKey("services.id"), ondelete="SET NULL")
+    service_id = Column(BigInteger, ForeignKey("services.id", ondelete="SET NULL"))
     path = Column(String(1024), nullable=False)
     language = Column(String(50))
     file_hash = Column(String(64), nullable=False)

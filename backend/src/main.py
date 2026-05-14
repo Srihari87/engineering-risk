@@ -6,8 +6,11 @@ from src.api.routes import router
 from src.config import config
 
 # Initialize database
-Base.metadata.create_all(bind=engine)
-
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Warning: Could not create tables: {e}")
+    
 # Create app
 app = FastAPI(
     title="Engineering Risk Intelligence Platform",

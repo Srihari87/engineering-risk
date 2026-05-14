@@ -12,7 +12,6 @@ engine = create_engine(
     pool_recycle=3600,
     pool_pre_ping=True,
     echo=False,
-    connect_args={"timeout": 10},
 )
 
 # Session factory
