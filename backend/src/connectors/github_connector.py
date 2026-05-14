@@ -65,6 +65,16 @@ class GitHubConnector:
         
         return response.json()
     
+    def _fetch_file_content(self, owner: str, repo_name: str, file_path: str):
+        """Fetch raw file content from GitHub"""
+        url = f"https://raw.githubusercontent.com/{owner}/{repo_name}/main/{file_path}"
+        response = requests.get(url)
+        
+        if response.status_code != 200:
+            return None
+        
+        return response.text
+    
     def ingest_repo(self, owner: str, repo_name: str):
         """Full ingestion: repo + commits"""
         db = SessionLocal()

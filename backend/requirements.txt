@@ -9,3 +9,7 @@ python-dotenv
 uvicorn
 alembic
 pytest
+tree-sitter
+tree-sitter-python
+tree-sitter-typescript
+tree-sitter-go

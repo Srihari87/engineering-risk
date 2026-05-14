@@ -59,6 +59,7 @@ class File(Base):
     
     repo = relationship("Repo", back_populates="files")
     service = relationship("Service", back_populates="files")
+    code_entities = relationship("CodeEntity", back_populates="file", cascade="all, delete-orphan")
 
 class Owner(Base):
     __tablename__ = "owners"
@@ -109,3 +110,19 @@ class Incident(Base):
     
     repo = relationship("Repo", back_populates="incidents")
     service = relationship("Service", back_populates="incidents")
+
+class CodeEntity(Base):
+    __tablename__ = "code_entities"
+    
+    id = Column(BigInteger, primary_key=True)
+    file_id = Column(BigInteger, ForeignKey("files.id", ondelete="CASCADE"), nullable=False)
+    type = Column(String(50))  # 'function', 'class', 'method'
+    name = Column(String(255), nullable=False)
+    start_line = Column(Integer, nullable=False)
+    end_line = Column(Integer, nullable=False)
+    calls_text = Column(Text)  # JSON array of function calls
+    called_by_text = Column(Text)  # JSON array of callers
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    file = relationship("File", back_populates="code_entities")
